@@ -158,3 +158,15 @@ class SetupHandlerTools(object):
                     ctx.setDefaultPage(id)
             if 'childs' in item and item['childs']:
                 self.create_item_runner(ctx[id], item['childs'], lang=lang)
+
+
+    def add_calendar_type(self, calendar_types):
+        """ Configures Products.CMFPlone.CalendarTool
+        """
+        calendar_tool = getToolByName(self.context, 'portal_calendar')
+        if isinstance(list, calendar_types):
+            calendar_types = tuple(calendar_types)
+        if not isinstance(tuple, calendar_types):
+            calendar_types = (calendar_types, )
+        calendar_tool.calendar_types += calendar_types
+        self.logger.info('added %s to calendar_types' % str(calendar_types))
