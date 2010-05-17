@@ -45,6 +45,7 @@ class SetupHandlerTools(object):
     def unsafe_html_transform(self):
         tid = 'safe_html'
 
+        tconfig = dict()
         tconfig['class_blacklist'] = []
         tconfig['nasty_tags'] = {'meta': '1'}
         tconfig['remove_javascript'] = 0
@@ -152,7 +153,7 @@ class SetupHandlerTools(object):
                     item['data'] = {}
                 if 'lang' not in item['opts']:
                     item['opts']['lang'] = lang
-                create_item(ctx, id, item)
+                self.create_item(ctx, id, item)
                 if 'setDefault' in item['opts']:
                     ctx.setDefaultPage(id)
             if 'childs' in item and item['childs']:
