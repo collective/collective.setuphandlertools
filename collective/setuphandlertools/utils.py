@@ -10,6 +10,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import normalizeString
 from Products.ATContentTypes.lib import constraintypes
 from Products.PortalTransforms.Transform import make_config_persistent
+from Products.CMFCore.WorkflowCore import WorkflowException
 
 import os
 from App.Common import package_home
@@ -134,7 +135,10 @@ class SetupHandlerTools(object):
                 if item['opts']['workflow'] is not None: # else leave it in original state
                     wft.doActionFor(ctx[id], item['opts']['workflow'])
             else:
-                wft.doActionFor(ctx[id], 'publish')
+                try:
+                    wft.doActionFor(ctx[id], 'publish')
+                except WorkflowException:
+                    pass # e.g. "No workflows found"
             ctx[id].setLanguage(item['opts']['lang'])
             ctx[id].reindexObject()
             self.logger.info('added %s' % id)
