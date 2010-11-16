@@ -27,11 +27,41 @@ class SetupHandlerTools(object):
 
 
     def isNotThisProfile(self, marker_file):
+        """ Return True if marker_file CANNOT be found in current profile's
+        context. Used to exit a setuphandler step if it isn't called in
+        profile's context.
+
+        @param marker_file: The name of the file which should be present in the
+                            Profile's context.
+
+        """
         return self.context.readDataFile(marker_file) is None
 
 
+    def add_calendar_type(self, calendar_types):
+        """ Adds calendar types to Products.CMFPlone.CalendarTool.
+
+        @param calendar_types: Tuple of names of calendar types to be added to
+                               portal_calendar.
+
+        """
+        calendar_tool = getToolByName(self.context, 'portal_calendar')
+        if isinstance(list, calendar_types):
+            calendar_types = tuple(calendar_types)
+        if not isinstance(tuple, calendar_types):
+            calendar_types = (calendar_types, )
+        calendar_tool.calendar_types += calendar_types
+        self.logger.info('added %s to calendar_types' % str(calendar_types))
+
+
     def load_file(self, name, subdir=None):
-        """Load a file from data directory."""
+        """ Load a file from a directory and return it's data.
+
+        @param name: Name of the file to be loaded.
+
+        @param subdir: subdirectory in current's package context.
+
+        """
         PACKAGE_HOME = package_home(self.package_globals)
         if subdir:
             path = os.path.join(PACKAGE_HOME, subdir, name)
@@ -44,6 +74,12 @@ class SetupHandlerTools(object):
 
 
     def unsafe_html_transform(self):
+        """ Configure safe_html transformation from portal_transforms, so that
+        it also allows embed and object elements.
+        Also configure the style_whitelist to allow some styles needed for
+        TinyMCE to bypass a limitation found in beta versions of Plone 4.0.
+
+        """
         tid = 'safe_html'
 
         tconfig = dict()
@@ -83,6 +119,15 @@ class SetupHandlerTools(object):
 
 
     def setup_portal_transforms(self, transform_id, transform_config):
+        """ Persistently configure a specific transformation in
+        portal_transforms.
+
+        @param transform_id: The transformation identifier (e.g. "safe_html")
+
+        @param transform_config: A dictionary with the transformation
+                                 configuration.
+
+        """
         self.logger.info('Updating portal_transform settings from' + transform_id)
 
         pt = getToolByName(self.context, 'portal_transforms')
@@ -96,24 +141,22 @@ class SetupHandlerTools(object):
         trans._p_changed = True
         trans.reload()
 
-    """
-    [{'type':None,
-      'id':None,
-      'title':None,
-      'data':{},
-      'childs':[],
-      'opts':{
-          'lang':None,
-          'setDefault':None,
-          'setExcludeFromNav':None,
-          'setLayout':None,
-          'setLocallyAllowedTypes':None,
-          'setImmediatelyAddableTypes':None,
-          'workflow':None,}
-      }
-     ]
-     """
+
+
     def create_item(self, ctx, id, item):
+        """ Create an Archetype content item in the given context.
+        This function is called by create_item_runner for each content found in
+        it's given data structure.
+
+        @param ctx: The context in which the item should be created.
+
+        @param id: The identifier of the item to be created. If it exists, the
+                   item won't be created.
+
+        @param item: A dictionary with the item configuration. See
+                     create_item_runner for a more verbose explanation.
+
+        """
         if not id in ctx.contentIds():
             wft = getToolByName(ctx, 'portal_workflow')
             ctx.invokeFactory(item['type'], id, title=item['title'], **item['data'])
@@ -145,6 +188,36 @@ class SetupHandlerTools(object):
 
 
     def create_item_runner(self, ctx, content, lang='en'):
+        """ Create Archetype contents from a list of dictionaries, where each
+        dictionary describes a content item and optionally it's childs.
+
+        @param ctx: The context in which the item should be created.
+
+        @param content: The datastructure of the contents to be created. See
+                        below.
+
+        @param lang: The default language of the content items to be created.
+
+        The datastructure of content is like so:
+
+        [{'type': None,
+          'id': None,
+          'title': None,
+          'data':{'description': None},
+          'childs':[],
+          'opts':{
+              'lang': None,
+              'setDefault': None,
+              'setExcludeFromNav': None,
+              'setLayout': None,
+              'setLocallyAllowedTypes': None,
+              'setImmediatelyAddableTypes': None,
+              'workflow':None,}
+        },]
+
+        Use the same structure for each child. Leave out, what you don't need.
+
+        """
         for item in content:
             if 'id' not in item:
                 id = normalizeString(item['title'], context=ctx)
@@ -162,15 +235,3 @@ class SetupHandlerTools(object):
                     ctx.setDefaultPage(id)
             if 'childs' in item and item['childs']:
                 self.create_item_runner(ctx[id], item['childs'], lang=lang)
-
-
-    def add_calendar_type(self, calendar_types):
-        """ Configures Products.CMFPlone.CalendarTool
-        """
-        calendar_tool = getToolByName(self.context, 'portal_calendar')
-        if isinstance(list, calendar_types):
-            calendar_types = tuple(calendar_types)
-        if not isinstance(tuple, calendar_types):
-            calendar_types = (calendar_types, )
-        calendar_tool.calendar_types += calendar_types
-        self.logger.info('added %s to calendar_types' % str(calendar_types))
