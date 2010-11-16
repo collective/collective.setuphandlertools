@@ -1,4 +1,4 @@
-from collective.setuphandlertools.utils import (
+from collective.setuphandlertools.setuphandlertools import (
     load_file,
     isNotThisProfile,
     add_calendar_type,
