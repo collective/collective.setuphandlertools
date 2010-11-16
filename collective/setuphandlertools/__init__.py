@@ -1,0 +1,1 @@
+from collective.setuphandlertools import SetupHandlerTools
