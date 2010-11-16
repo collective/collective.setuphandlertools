@@ -17,6 +17,20 @@ from Products.PortalTransforms.Transform import make_config_persistent
 logger = logging.getLogger('collective.setuphandlertools')
 
 
+def isNotThisProfile(setup_context, marker_file):
+    """ Return True if marker_file CANNOT be found in current profile's
+    context. Used to exit a setuphandler step if it isn't called in
+    profile's context.
+
+    @param setup_context: The setuphandler context.
+
+    @param marker_file: The name of the file which should be present in the
+                        Profile's context.
+
+    """
+    return setup_context.readDataFile(marker_file) is None
+
+
 def load_file(callers_globals, name, subdir=''):
     """ Load a file from a directory relative to the caller's module path and
     return it's data.
@@ -38,20 +52,6 @@ def load_file(callers_globals, name, subdir=''):
     data = file_desc.read()
     file_desc.close()
     return data
-
-
-def isNotThisProfile(setup_context, marker_file):
-    """ Return True if marker_file CANNOT be found in current profile's
-    context. Used to exit a setuphandler step if it isn't called in
-    profile's context.
-
-    @param setup_context: The setuphandler context.
-
-    @param marker_file: The name of the file which should be present in the
-                        Profile's context.
-
-    """
-    return setup_context.readDataFile(marker_file) is None
 
 
 def add_calendar_type(context, calendar_types, logger=logger):
