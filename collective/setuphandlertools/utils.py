@@ -6,14 +6,14 @@ __author__ = """Johannes Raggam <johannes@raggam.co.at>"""
 __docformat__ = 'plaintext'
 
 import logging
-from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.utils import normalizeString
-from Products.ATContentTypes.lib import constraintypes
-from Products.PortalTransforms.Transform import make_config_persistent
-from Products.CMFCore.WorkflowCore import WorkflowException
-
 import os
 from App.Common import package_home
+from Products.ATContentTypes.lib import constraintypes
+from Products.CMFCore.utils import getToolByName
+from Products.CMFCore.WorkflowCore import WorkflowException
+from Products.CMFPlone.utils import normalizeString
+from Products.PortalTransforms.Transform import make_config_persistent
+
 
 class SetupHandlerTools(object):
 
