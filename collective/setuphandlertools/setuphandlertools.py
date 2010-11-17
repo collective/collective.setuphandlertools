@@ -282,7 +282,7 @@ def create_item_runner(ctx, content, lang='en', logger=logger):
                 item['data'] = {}
             if 'lang' not in item['opts']:
                 item['opts']['lang'] = lang
-            create_item(ctx, id, item)
+            create_item(ctx, id, item, logger=logger)
             if 'setDefault' in item['opts']:
                 ctx.setDefaultPage(id)
         if 'childs' in item and item['childs']:
