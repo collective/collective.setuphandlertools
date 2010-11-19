@@ -61,3 +61,9 @@ Author
 
 Johannes Raggam <johannes at raggam dot co dot at>
 BlueDynamics Alliance, 2010
+
+
+Credits
+=======
+
+Carsten Senger for some ideas.
