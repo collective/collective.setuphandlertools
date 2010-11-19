@@ -311,21 +311,23 @@ def add_user(context, username, password, email=None, fullname=None,
     """
     pr = getToolByName(context, 'portal_registration')
     pm = getToolByName(context, 'portal_membership')
-    acl_users = plone.acl_users
+    acl_users = context.acl_users
 
     pr.addMember(username, password)
     member = pm.getMemberById(username)
     member.setMemberProperties(dict(email=email, fullname=fullname))
+    logger.info('Added user %s' % username)
+
     if roles is not None:
         acl_users.userFolderEditUser(username, password, roles, '')
+        logger.info('Added roles %s to user %s' % (roles, username))
 
     if groups is not None:
-        gtool = getToolByName(portal, 'portal_groups')
+        gtool = getToolByName(context, 'portal_groups')
         for group_id in groups:
             group = gtool.getGroupById(group_id)
             group.addMember(username)
-
-    logger.info('Added User %s' % username)
+            logger.info('Added user %s to group %s' % (username, group_id))
 
 
 def add_group(context, name, roles=None, groups=None, members=None,
