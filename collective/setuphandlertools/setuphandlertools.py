@@ -345,5 +345,6 @@ def add_group(context, name, roles=None, groups=None, members=None):
     gtool = getToolByName(context, 'portal_groups')
     gtool.addGroup(name, roles=roles, groups=groups)
     group = gtool.getGroupById(name)
-    for member in members:
-        group.addMember(member)
+    if members:
+        for member in members:
+            group.addMember(member)
