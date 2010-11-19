@@ -7,5 +7,7 @@ from collective.setuphandlertools.setuphandlertools import (
     delete_items,
     hide_and_retract,
     create_item,
-    create_item_runner
+    create_item_runner,
+    add_user,
+    add_group
 )

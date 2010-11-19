@@ -288,3 +288,62 @@ def create_item_runner(ctx, content, lang='en', logger=logger):
         if 'childs' in item and item['childs']:
             create_item_runner(ctx[id], item['childs'], lang=lang,
                                logger=logger)
+
+
+def add_user(context, username, password, email=None, fullname=None,
+             roles=None, logger=logger):
+    """ Add a user to plone.
+
+    @param context: A Plone context.
+
+    @param username: The login name of the user.
+
+    @param password: The password of the user.
+
+    @param email: The Emailadress of the user.
+
+    @param fullname: The fullname of the user.
+
+    @param roles: A list of roles, the user should be in (e.g. "Manager").
+
+    @param groups: A list of group, the user should be in.
+
+    """
+    pr = getToolByName(context, 'portal_registration')
+    pm = getToolByName(context, 'portal_membership')
+    acl_users = plone.acl_users
+
+    pr.addMember(username, password)
+    member = pm.getMemberById(username)
+    member.setMemberProperties(dict(email=email, fullname=fullname))
+    if roles is not None:
+        acl_users.userFolderEditUser(username, password, roles, '')
+
+    if groups is not None:
+        gtool = getToolByName(portal, 'portal_groups')
+        for group_id in groups:
+            group = gtool.getGroupById(group_id)
+            group.addMember(username)
+
+    logger.info('Added User %s' % username)
+
+
+def add_group(context, name, roles=None, groups=None, members=None):
+    """ Add a group to plone.
+
+    @param context: A Plone context.
+
+    @param name: The name of the group to add.
+
+    @param roles: A list of roles, the group should be in.
+
+    @param groups: A list of groups, the group should be in.
+
+    @param members: A list of member ids to add to the new group.
+
+    """
+    gtool = getToolByName(context, 'portal_groups')
+    gtool.addGroup(name, roles=roles, groups=groups)
+    group = gtool.getGroupById(name)
+    for member in members:
+        group.addMember(member)
