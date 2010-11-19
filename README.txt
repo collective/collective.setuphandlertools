@@ -21,6 +21,16 @@ add_calendar_type
 Add calendar types to Products.CMFPlone.CalendarTool.
 
 
+add_group
+---------
+Add a group to plone.
+
+
+add_user
+--------
+Add a user to plone.
+
+
 load_file
 ---------
 Load a file from a directory and return it's data.
