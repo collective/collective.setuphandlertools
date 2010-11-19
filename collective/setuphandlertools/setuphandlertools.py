@@ -291,7 +291,7 @@ def create_item_runner(ctx, content, lang='en', logger=logger):
 
 
 def add_user(context, username, password, email=None, fullname=None,
-             roles=None, logger=logger):
+             roles=None, groups=None, logger=logger):
     """ Add a user to plone.
 
     @param context: A Plone context.
@@ -328,7 +328,8 @@ def add_user(context, username, password, email=None, fullname=None,
     logger.info('Added User %s' % username)
 
 
-def add_group(context, name, roles=None, groups=None, members=None):
+def add_group(context, name, roles=None, groups=None, members=None,
+              logger=logger):
     """ Add a group to plone.
 
     @param context: A Plone context.
@@ -344,7 +345,10 @@ def add_group(context, name, roles=None, groups=None, members=None):
     """
     gtool = getToolByName(context, 'portal_groups')
     gtool.addGroup(name, roles=roles, groups=groups)
+    logger.info('Added group %s' % name)
     group = gtool.getGroupById(name)
     if members:
         for member in members:
             group.addMember(member)
+            logger.info('Added member %s to group %s' % (member, name))
+
