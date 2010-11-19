@@ -313,6 +313,10 @@ def add_user(context, username, password, email=None, fullname=None,
     pm = getToolByName(context, 'portal_membership')
     acl_users = context.acl_users
 
+    if acl_users.searchPrincipals(id=username, exact_match=True):
+        logger.info('User %s exists already' % username)
+        return
+
     pr.addMember(username, password)
     member = pm.getMemberById(username)
     member.setMemberProperties(dict(email=email, fullname=fullname))
