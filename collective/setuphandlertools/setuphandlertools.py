@@ -7,7 +7,6 @@ __docformat__ = 'plaintext'
 
 import logging
 import os
-from App.Common import package_home
 from Products.ATContentTypes.lib import constraintypes
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.WorkflowCore import WorkflowException
