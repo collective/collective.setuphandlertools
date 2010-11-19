@@ -82,4 +82,4 @@ BlueDynamics Alliance, 2010
 Credits
 =======
 
-Carsten Senger for some ideas.
+Carsten Senger for adding users.

@@ -6,7 +6,7 @@ version = '1.0b1'
 setup(name='collective.setuphandlertools',
       version=version,
       description="Tools for setting up a Plone site.",
-      long_description=open("README.txt").read() + "\n" +
+      long_description=open("README.txt").read() + "\n\n" +
                        open(os.path.join("docs", "HISTORY.txt")).read(),
       # Get more strings from http://pypi.python.org/pypi?:action=list_classifiers
       classifiers=[
