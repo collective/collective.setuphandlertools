@@ -271,7 +271,7 @@ def load_file(callers_globals, name, subdir=''):
 
     """
     module_path = os.path.dirname(
-        sys.modules[callers_globals()['__name__']].__file__
+        sys.modules[callers_globals['__name__']].__file__
     )
     path = os.path.join(module_path, subdir, name)
     file_desc = open(path, 'rb')
