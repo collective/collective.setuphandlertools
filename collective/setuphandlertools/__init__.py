@@ -9,5 +9,6 @@ from collective.setuphandlertools.setuphandlertools import (
     create_item,
     create_item_runner,
     add_user,
-    add_group
+    add_group,
+    update_portlet_schema
 )

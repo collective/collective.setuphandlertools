@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-#
-# GNU General Public License (GPL)
-#
-__author__ = """Johannes Raggam <johannes@raggam.co.at>"""
-__docformat__ = 'plaintext'
-
 import logging
 import os
 import sys
@@ -215,7 +208,6 @@ def delete_items(ctx, items, logger=logger):
     @param logger: (Optional) A logging instance.
 
     """
-    wft = getToolByName(ctx, 'portal_workflow')
     for id in items:
         if id in ctx.contentIds():
             ctx.manage_delObjects( [id] )
@@ -356,3 +348,47 @@ def unsafe_html_transform(context, logger=logger):
         'section': '1', 'abbr': '1'}
 
     setup_portal_transforms(context, tid, tconfig, logger=logger)
+
+def update_portlet_schema(context, portlet_interface, attribute, value,
+        logger=logger):
+    """
+    Helper function to update a schema of an already registered portlet.
+
+    @param context: A Plone context.
+
+    @param portlet_interface: The interface that the portlet implements.
+
+    @param attribute: The name of the attribute to be added as string.
+
+    @param value: The value, the attribute should be initialized with.
+
+    @param logger: (Optional) A logging instance.
+
+    """
+    from plone.portlets.interfaces import ILocalPortletAssignable
+    from plone.portlets.interfaces import IPortletManager
+    from plone.portlets.interfaces import IPortletAssignmentMapping
+    from zope.component import getUtilitiesFor, getMultiAdapter
+
+    urltool = getToolByName(context, "portal_url")
+    site = urltool.getPortalObject()
+
+    cat = getToolByName(site, 'portal_catalog')
+    query = {'object_provides': ILocalPortletAssignable.__identifier__}
+    all_brains = cat(**query)
+    all_content = [brain.getObject() for brain in all_brains]
+    all_content.append(site)
+    for content in all_content:
+        for manager_name, manager in getUtilitiesFor(IPortletManager, context=content):
+            mapping = getMultiAdapter((content, manager), IPortletAssignmentMapping)
+            for id, assignment in mapping.items():
+                if portlet_interface.providedBy(assignment):
+                    try:
+                        getattr(assignment, attribute)
+                        logger.info("attribute %s on portlet already set"
+                            % attribute)
+
+                    except AttributeError:
+                        setattr(assignment, attribute, value)
+                        logger.info("attribute %s on portlet set with value %s "
+                            % (attribute, value))

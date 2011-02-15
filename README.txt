@@ -65,6 +65,9 @@ allows embed and object elements. Also configure the style_whitelist to allow
 some styles needed for TinyMCE to bypass a limitation found in beta versions of
 Plone 4.0.
 
+update_portlet_schema
+---------------------
+Helper function to update a schema of an already registered portlet.
 
 TODO
 ====

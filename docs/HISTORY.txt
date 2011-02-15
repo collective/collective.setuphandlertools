@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.0b3 (2011-02-15)
+------------------
+- Add update_portlet_schema helper function.
+  [thet]
+
 1.0b2 (2010-11-25)
 ------------------
 - Bugfixes: Missing import and don't call callers_globals for load_file.
