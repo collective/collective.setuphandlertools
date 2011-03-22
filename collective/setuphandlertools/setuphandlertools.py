@@ -214,7 +214,7 @@ def delete_items(ctx, items, logger=logger):
             logger.info('Removed %s' % id)
 
 
-def hide_and_retract(item, logger=logger):
+def hide_and_retract(item, hide=True, retract=True, logger=logger):
     """ Exclude an item from the navigation and retract it, if it was
     published. For example, to hide "Members" folder, if it shouldn't be
     shown to anonymous users.
@@ -224,16 +224,18 @@ def hide_and_retract(item, logger=logger):
     @param logger: (Optional) A logging instance.
 
     """
-    wft = getToolByName(item, 'portal_workflow')
-    item.setExcludeFromNav(True)
-    logger.info("%s excluded from navigation" % item.id)
-    try:
-        wft.doActionFor(item, 'retract')
-        logger.info("%s unpublished (retracted)" % item.id)
-    except:
-        logger.warn("""Unpublishing (retracting) %s was not possible. Maybe the
-                    item wasn't published or 'retract' transition not
-                    available""" % item.id)
+    if hide:
+        item.setExcludeFromNav(True)
+        logger.info("%s excluded from navigation" % item.id)
+    if retract:
+        wft = getToolByName(item, 'portal_workflow')
+        try:
+            wft.doActionFor(item, 'retract')
+            logger.info("%s unpublished (retracted)" % item.id)
+        except:
+            logger.warn("""Unpublishing (retracting) %s was not possible. Maybe
+                        the item wasn't published or 'retract' transition not
+                        available""" % item.id)
 
 
 def isNotThisProfile(setup_context, marker_file):

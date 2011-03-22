@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.0.b4 (unreleased)
+-------------------
+- Add options to deactivate hiding or retracting to hide_and_retract, if
+  necessary.
+  [thet]
+
 1.0b3 (2011-02-15)
 ------------------
 - Add update_portlet_schema helper function.
