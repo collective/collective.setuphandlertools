@@ -3,6 +3,10 @@ Changelog
 
 1.0.b4 (unreleased)
 -------------------
+- In create_item and create_item_runner, allow configurations of existing
+  items. Still don't allow creating items over existing ones.
+  [thet]
+
 - Add options to deactivate hiding or retracting to hide_and_retract, if
   necessary.
   [thet]

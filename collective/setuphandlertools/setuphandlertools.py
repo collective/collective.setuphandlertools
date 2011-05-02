@@ -115,34 +115,35 @@ def create_item(ctx, id, item, logger=logger):
     @param logger: (Optional) A logging instance.
 
     """
+    wft = getToolByName(ctx, 'portal_workflow')
     if not id in ctx.contentIds():
-        wft = getToolByName(ctx, 'portal_workflow')
         ctx.invokeFactory(item['type'], id, title=item['title'], **item['data'])
-        if 'setExcludeFromNav' in item['opts']:
-            ctx[id].setExcludeFromNav(item['opts']['setExcludeFromNav'])
-        if 'setLayout' in item['opts']:
-            ctx[id].setLayout(item['opts']['setLayout'])
-        if 'setLocallyAllowedTypes' in item['opts']:
-            try:
-                ctx[id].setConstrainTypesMode(constraintypes.ENABLED)
-                ctx[id].setLocallyAllowedTypes(item['opts']['setLocallyAllowedTypes'])
-            except: pass # not a folder?
-        if 'setImmediatelyAddableTypes' in item['opts']:
-            try:
-                ctx[id].setConstrainTypesMode(constraintypes.ENABLED)
-                ctx[id].setImmediatelyAddableTypes(item['opts']['setImmediatelyAddableTypes'])
-            except: pass # not a folder?
-        if 'workflow' in item['opts']:
-            if item['opts']['workflow'] is not None: # else leave it in original state
-                wft.doActionFor(ctx[id], item['opts']['workflow'])
-        else:
-            try:
-                wft.doActionFor(ctx[id], 'publish')
-            except WorkflowException:
-                pass # e.g. "No workflows found"
-        ctx[id].setLanguage(item['opts']['lang'])
-        ctx[id].reindexObject()
-        logger.info('added %s' % id)
+        logger.info('created %s' % id)
+    if 'setExcludeFromNav' in item['opts']:
+        ctx[id].setExcludeFromNav(item['opts']['setExcludeFromNav'])
+    if 'setLayout' in item['opts']:
+        ctx[id].setLayout(item['opts']['setLayout'])
+    if 'setLocallyAllowedTypes' in item['opts']:
+        try:
+            ctx[id].setConstrainTypesMode(constraintypes.ENABLED)
+            ctx[id].setLocallyAllowedTypes(item['opts']['setLocallyAllowedTypes'])
+        except: pass # not a folder?
+    if 'setImmediatelyAddableTypes' in item['opts']:
+        try:
+            ctx[id].setConstrainTypesMode(constraintypes.ENABLED)
+            ctx[id].setImmediatelyAddableTypes(item['opts']['setImmediatelyAddableTypes'])
+        except: pass # not a folder?
+    if 'workflow' in item['opts']:
+        if item['opts']['workflow'] is not None: # else leave it in original state
+            wft.doActionFor(ctx[id], item['opts']['workflow'])
+    else:
+        try:
+            wft.doActionFor(ctx[id], 'publish')
+        except WorkflowException:
+            pass # e.g. "No workflows found"
+    ctx[id].setLanguage(item['opts']['lang'])
+    ctx[id].reindexObject()
+    logger.info('configured %s' % id)
 
 
 def create_item_runner(ctx, content, lang='en', logger=logger):
@@ -183,16 +184,11 @@ def create_item_runner(ctx, content, lang='en', logger=logger):
             id = normalizeString(item['title'], context=ctx)
         else:
             id = item['id']
-        if not id in ctx.contentIds():
-            if 'opts' not in item or not item['opts']:
-                item['opts'] = {}
-            if 'data' not in item or not item['data']:
-                item['data'] = {}
-            if 'lang' not in item['opts']:
-                item['opts']['lang'] = lang
-            create_item(ctx, id, item, logger=logger)
-            if 'setDefault' in item['opts']:
-                ctx.setDefaultPage(id)
+        if 'opts' not in item or not item['opts']: item['opts'] = {}
+        if 'data' not in item or not item['data']: item['data'] = {}
+        if 'lang' not in item['opts']: item['opts']['lang'] = lang
+        create_item(ctx, id, item, logger=logger)
+        if 'setDefault' in item['opts']: ctx.setDefaultPage(id)
         if 'childs' in item and item['childs']:
             create_item_runner(ctx[id], item['childs'], lang=lang,
                                logger=logger)
