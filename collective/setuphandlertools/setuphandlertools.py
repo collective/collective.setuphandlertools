@@ -56,7 +56,7 @@ def add_group(context, name, roles=None, groups=None, members=None,
 
 
 def add_user(context, username, password, email=None, fullname=None,
-             roles=None, groups=None, logger=logger):
+             roles=None, groups=None, data={}, logger=logger):
     """ Add a user to plone.
 
     @param context: A Plone context.
@@ -84,7 +84,8 @@ def add_user(context, username, password, email=None, fullname=None,
 
     pr.addMember(username, password)
     member = pm.getMemberById(username)
-    member.setMemberProperties(dict(email=email, fullname=fullname))
+    member.setMemberProperties(dict(email=email,
+                               fullname=fullname).update(data)) #<-- TODO: binary data doesn't work. mabe this string doesn't even work. have to check.
     logger.info('Added user %s' % username)
 
     if roles is not None:
