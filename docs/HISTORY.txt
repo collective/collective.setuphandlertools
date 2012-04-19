@@ -1,8 +1,13 @@
 Changelog
 =========
 
-1.0.b4 (unreleased)
+1.0.b4 (2012-04-19)
 -------------------
+
+- Allow color styles in unsafe_html_transform step. Allows colorizing text in
+  TinyMCE.
+  [thet]
+
 - In create_item and create_item_runner, allow configurations of existing
   items. Still don't allow creating items over existing ones.
   [thet]
