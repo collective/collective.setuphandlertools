@@ -323,7 +323,7 @@ def unsafe_html_transform(context, logger=logger):
                                      'cellpadding', 'bgcolor']
     tconfig['stripped_combinations'] = {}
     tconfig['style_whitelist'] = ['text-align', 'list-style-type', 'float',
-                                  'width', 'height', 'padding-left',
+                                  'color', 'width', 'height', 'padding-left',
                                   'padding-right'] # allow specific styles for
                                                    # TinyMCE editing
     tconfig['valid_tags'] = {
