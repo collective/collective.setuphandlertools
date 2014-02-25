@@ -289,7 +289,8 @@ def setup_portal_transforms(context, transform_id, transform_config,
 
     """
     pt = getToolByName(context, 'portal_transforms')
-    if not transform_id in pt.objectIds(): return
+    if not transform_id in pt.objectIds():
+        return
     trans = pt[transform_id]
 
     tconfig = trans._config
@@ -319,13 +320,15 @@ def unsafe_html_transform(context, logger=logger):
     tconfig['nasty_tags'] = {'meta': '1'}
     tconfig['remove_javascript'] = 0
     tconfig['stripped_attributes'] = ['lang', 'valign', 'halign', 'border',
-                                     'frame', 'rules', 'cellspacing',
-                                     'cellpadding', 'bgcolor']
+                                      'frame', 'rules', 'cellspacing',
+                                      'cellpadding', 'bgcolor']
     tconfig['stripped_combinations'] = {}
+    # allow specific styles for TinyMCE editing
     tconfig['style_whitelist'] = ['text-align', 'list-style-type', 'float',
                                   'color', 'width', 'height', 'padding-left',
-                                  'padding-right'] # allow specific styles for
-                                                   # TinyMCE editing
+                                  'padding-right', 'text-transform',
+                                  'text-decoration', 'background',
+                                  'background-color', ]
     tconfig['valid_tags'] = {
         'code': '1', 'meter': '1', 'tbody': '1', 'style': '1', 'img': '0',
         'title': '1', 'tt': '1', 'tr': '1', 'param': '1', 'li': '1',
