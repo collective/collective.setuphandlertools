@@ -25,7 +25,7 @@ setup(name='collective.setuphandlertools',
       install_requires=[
           'setuptools',
           # -*- Extra requirements: -*-
-          'Plone',
+          'Products.CMFPlone',
           'Products.ATContentTypes',
           'Products.CMFCore',
           'Products.PortalTransforms',

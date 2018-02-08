@@ -1,6 +1,13 @@
 Changelog
 =========
 
+1.0 (unreleased)
+----------------
+
+- Depend on ``Products.CMFPlone`` instead of ``Plone`` to not fetch unnecessary dependencies.
+  [thet]
+
+
 1.0.b4 (2012-04-19)
 -------------------
 
